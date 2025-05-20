@@ -143,7 +143,7 @@ async function live(client: GoogleGenAI, model: string) {
   // await handleTurn();
   // console.log("-".repeat(80));
 
-  (window as any).ask = async (s: string) => {
+  (window as any).ask_gemini = async (s: string) => {
     if (cacheOfSession) {
       cacheOfSession.sendClientContent({ turns: s });
       // await handleTurn();

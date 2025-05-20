@@ -8,6 +8,15 @@ fnalias @respo_node.(div, span, button, respo_style)
 let app_store_key : String = "mbt-workflow"
 
 ///|
+extern "js" fn register_gemini_ask() -> Unit =
+  #| () => {};
+  #| import "/src/control.mjs";
+
+///|
+extern "js" fn ask_gemini(msg : String) -> Unit =
+  #| (msg) => { window.ask_gemini(msg); };
+
+///|
 fn view(
   store : Store
 ) -> @respo_node.RespoNode[ActionOp]!@respo_node.RespoCommonError {
@@ -17,12 +26,13 @@ fn view(
   // @dom_ffi.log("Store to render: " + store.to_json().stringify(indent=2))
   let states = store.get_states()
   div(class_name=ui_global, style=respo_style(padding=Px(12)), [
-    comp_counter(states.pick("counter"), store.counted),
+    comp_container(states.pick("container")),
   ])
 }
 
 ///|
 fn main {
+  register_gemini_ask()
   let window = @dom_ffi.window()
   let mount_target = window
     .document()
@@ -36,7 +46,11 @@ fn main {
   app.backup_model_beforeunload()
   // @dom_ffi.log("store: " + app.store.val.to_json().stringify(indent=2))
   app.render_loop(fn() { view!(app.store.val) }, fn(op) {
-    @dom_ffi.log("Action: " + op.to_string())
+    if op is StatesChange(_) {
+
+    } else {
+      @dom_ffi.log("op: \{op}")
+    }
     app.store.val.update(op)
   })
   let dev_mode = @dom_ffi.new_url_search_params(window.location().search()).get(

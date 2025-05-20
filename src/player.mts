@@ -30,7 +30,6 @@ let loopPlay = () => {
 
 export let loadAudio = (audioStr: string) => {
   audioBlobQueue.push(audioStr);
-  console.log("load one", audioBlobQueue.length);
   if (!isPlaying) {
     if (audioBlobQueue.length > 8) {
       loopPlay();
