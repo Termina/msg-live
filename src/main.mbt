@@ -2,7 +2,7 @@
 fnalias @respo.(ui_global, ui_button)
 
 ///|
-fnalias @respo_node.(div, span, button, respo_style)
+fnalias @respo_node.(div, button, respo_style)
 
 ///|
 let app_store_key : String = "mbt-workflow"

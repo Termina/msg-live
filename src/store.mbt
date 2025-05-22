@@ -1,6 +1,6 @@
 ///|
 struct Store {
-  mut counted : Int
+  counted : Int
   tasks : Array[Task]
   states : @respo.RespoStatesTree
 } derive(ToJson, @json.FromJson)
@@ -21,9 +21,6 @@ struct Task {
 ///|
 enum ActionOp {
   StatesChange(@respo.RespoUpdateState)
-  Increment
-  Decrement
-  IncTwice
 }
 
 ///|
@@ -36,10 +33,6 @@ impl Show for ActionOp with output(self, logger) -> Unit {
   let s = match self {
     StatesChange(states) =>
       "StatesChange(\{states.cursor}  \{states.data.to_json()})"
-    // Intent(_intent) => "Intent(...)"
-    Increment => "Increment"
-    Decrement => "Decrement"
-    IncTwice => "IncTwice"
   }
   logger.write_string(s)
 }
@@ -52,10 +45,7 @@ fn get_states(self : Store) -> @respo.RespoStatesTree {
 ///| TODO mutation might break memoization in future
 fn update(self : Store, op : ActionOp) -> Unit {
   match op {
-    Increment => self.counted += 1
     StatesChange(states) => self.states.set_in_mut(states)
-    Decrement => self.counted -= 1
-    _ => ()
   }
 }
 
